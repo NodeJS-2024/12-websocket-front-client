@@ -27,10 +27,17 @@
 
     const form = document.querySelector('form');
     const input = document.querySelector('input');
+    const messagesElem = document.querySelector('#messages');
 
     function sendMessage(message) {
       // console.log(message);
       socket.send(message);
+    }
+
+    function renderMessage(message) {
+      const li = document.createElement('li');
+      li.innerHTML = message;
+      messagesElem.prepend(li);
     }
 
     form.addEventListener('submit', (event) => {
@@ -51,8 +58,9 @@
     }
 
     socket.onmessage = (event) => {
-      const payload = JSON.parse(event.data);
-      console.log(payload);
+      const { payload } = JSON.parse(event.data);
+      // console.log(payload);
+      renderMessage(payload);
     }
 
   </script>
