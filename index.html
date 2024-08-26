@@ -23,36 +23,36 @@
   <script>
     // console.log('Hola Mundo');
 
+    let socket = null;
+
     const form = document.querySelector('form');
     const input = document.querySelector('input');
-
+    const statusElem = document.querySelector('small');
     const messagesElem = document.querySelector('#messages');
 
-    const statusElem = document.querySelector('small');
+    function sendMessage(message) {
+      // socket?.send(message); - Es la misma
+      socket && socket.send(message);
+    }
+
+    function renderMessage(message) {
+      const li = document.createElement('li');
+      li.innerHTML = message;
+      messagesElem.prepend(li);
+    }
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const message = input.value;
+      sendMessage(message);
+      input.value = null; // limpia el mensaje
+    });
 
 
     function connectToServer() {
+      socket = new WebSocket('ws://localhost:3000');
 
-      const socket = new WebSocket('ws://localhost:3000');
-
-      function sendMessage(message) {
-        // console.log(message);
-        socket.send(message);
-      }
-
-      function renderMessage(message) {
-        const li = document.createElement('li');
-        li.innerHTML = message;
-        messagesElem.prepend(li);
-      }
-
-      form.addEventListener('submit', (event) => {
-        event.preventDefault();
-
-        const message = input.value;
-        sendMessage(message);
-      });
-      
       socket.onopen = (event) => {
         // console.log(event);
         // console.log('Connected');
