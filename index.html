@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Websockets</title>
+</head>
+
+<body>
+
+  <h1>Websockets - Status</h1>
+
+  <form>
+    <input type="text" placeholder="Enviar mensaje" />
+    <button>Enviar</button>
+  </form>
+
+  <ul id="messages">
+
+  </ul>
+
+  <script>
+    // console.log('Hola Mundo');
+
+    const socket = new WebSocket('ws://localhost:3000');
+
+    const form = document.querySelector('form');
+    const input = document.querySelector('input');
+
+    function sendMessage(message) {
+      // console.log(message);
+      socket.send(message);
+    }
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const message = input.value;
+      sendMessage(message);
+    });
+    
+    socket.onopen = (event) => {
+      console.log(event);
+      console.log('Connected');
+    }
+
+    socket.onclose = (event) => {
+      console.log(event);
+      console.log('Disconnected');
+    }
+
+    socket.onmessage = (event) => {
+      const payload = JSON.parse(event.data);
+      console.log(payload);
+    }
+
+  </script>
+
+</body>
+
+</html>
